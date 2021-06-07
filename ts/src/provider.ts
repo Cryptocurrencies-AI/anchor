@@ -151,19 +151,19 @@ export class NodeWallet implements Wallet {
   constructor(readonly payer: Account) {}
 
   static local(): NodeWallet {
-    const payer = new Account(
-      Buffer.from(
-        JSON.parse(
-          require("fs").readFileSync(
-            require("os").homedir() + "/.config/solana/id.json",
-            {
-              encoding: "utf-8",
-            }
-          )
-        )
-      )
-    );
-    return new NodeWallet(payer);
+    // const payer = new Account(
+    //   Buffer.from(
+    //     JSON.parse(
+    //       require("fs").readFileSync(
+    //         require("os").homedir() + "/.config/solana/id.json",
+    //         {
+    //           encoding: "utf-8",
+    //         }
+    //       )
+    //     )
+    //   )
+    // );
+    return new NodeWallet(null);
   }
 
   async signTransaction(tx: Transaction): Promise<Transaction> {
