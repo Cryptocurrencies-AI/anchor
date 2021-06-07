@@ -15,66 +15,66 @@ let _populatedWorkspace = false;
  */
 const workspace = new Proxy({} as any, {
   get(workspaceCache: { [key: string]: Program }, programName: string) {
-    const find = require("find");
-    const fs = require("fs");
-    const process = require("process");
+    // const find = require("find");
+    // const fs = require("fs");
+    // const process = require("process");
 
-    if (typeof window !== "undefined") {
-      // Workspaces aren't available in the browser, yet.
-      return undefined;
-    }
+    // if (typeof window !== "undefined") {
+    //   // Workspaces aren't available in the browser, yet.
+    //   return undefined;
+    // }
 
-    if (!_populatedWorkspace) {
-      const path = require("path");
+    // if (!_populatedWorkspace) {
+    //   const path = require("path");
 
-      let projectRoot = process.cwd();
-      while (!fs.existsSync(path.join(projectRoot, "Anchor.toml"))) {
-        const parentDir = path.dirname(projectRoot);
-        if (parentDir === projectRoot) {
-          projectRoot = undefined;
-        }
-        projectRoot = parentDir;
-      }
+    //   let projectRoot = process.cwd();
+    //   while (!fs.existsSync(path.join(projectRoot, "Anchor.toml"))) {
+    //     const parentDir = path.dirname(projectRoot);
+    //     if (parentDir === projectRoot) {
+    //       projectRoot = undefined;
+    //     }
+    //     projectRoot = parentDir;
+    //   }
 
-      if (projectRoot === undefined) {
-        throw new Error("Could not find workspace root.");
-      }
+    //   if (projectRoot === undefined) {
+    //     throw new Error("Could not find workspace root.");
+    //   }
 
-      const idlMap = new Map<string, Idl>();
+    //   const idlMap = new Map<string, Idl>();
 
-      find
-        .fileSync(/target\/idl\/.*\.json/, projectRoot)
-        .reduce((programs: any, path: string) => {
-          const idlStr = fs.readFileSync(path);
-          const idl = JSON.parse(idlStr);
-          idlMap.set(idl.name, idl);
-          const name = camelCase(idl.name, { pascalCase: true });
-          if (idl.metadata && idl.metadata.address) {
-            programs[name] = new Program(
-              idl,
-              new PublicKey(idl.metadata.address)
-            );
-          }
-          return programs;
-        }, workspaceCache);
+    //   find
+    //     .fileSync(/target\/idl\/.*\.json/, projectRoot)
+    //     .reduce((programs: any, path: string) => {
+    //       const idlStr = fs.readFileSync(path);
+    //       const idl = JSON.parse(idlStr);
+    //       idlMap.set(idl.name, idl);
+    //       const name = camelCase(idl.name, { pascalCase: true });
+    //       if (idl.metadata && idl.metadata.address) {
+    //         programs[name] = new Program(
+    //           idl,
+    //           new PublicKey(idl.metadata.address)
+    //         );
+    //       }
+    //       return programs;
+    //     }, workspaceCache);
 
-      // Override the workspace programs if the user put them in the config.
-      const anchorToml = toml.parse(
-        fs.readFileSync(path.join(projectRoot, "Anchor.toml"), "utf-8")
-      );
-      const clusterId = anchorToml.provider.cluster;
-      if (anchorToml.clusters && anchorToml.clusters[clusterId]) {
-        attachWorkspaceOverride(
-          workspaceCache,
-          anchorToml.clusters[clusterId],
-          idlMap
-        );
-      }
+    //   // Override the workspace programs if the user put them in the config.
+    //   const anchorToml = toml.parse(
+    //     fs.readFileSync(path.join(projectRoot, "Anchor.toml"), "utf-8")
+    //   );
+    //   const clusterId = anchorToml.provider.cluster;
+    //   if (anchorToml.clusters && anchorToml.clusters[clusterId]) {
+    //     attachWorkspaceOverride(
+    //       workspaceCache,
+    //       anchorToml.clusters[clusterId],
+    //       idlMap
+    //     );
+    //   }
 
-      _populatedWorkspace = true;
-    }
+    //   _populatedWorkspace = true;
+    // }
 
-    return workspaceCache[programName];
+    // return workspaceCache[programName];
   },
 });
 
