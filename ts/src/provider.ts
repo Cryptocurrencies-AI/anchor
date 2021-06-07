@@ -227,19 +227,19 @@ export class NodeWallet implements Wallet {
   constructor(readonly payer: Keypair) {}
 
   static local(): NodeWallet {
-    const payer = Keypair.fromSecretKey(
-      Buffer.from(
-        JSON.parse(
-          require("fs").readFileSync(
-            require("os").homedir() + "/.config/solana/id.json",
-            {
-              encoding: "utf-8",
-            }
-          )
-        )
-      )
-    );
-    return new NodeWallet(payer);
+    // const payer = Keypair.fromSecretKey(
+    //   Buffer.from(
+    //     JSON.parse(
+    //       require("fs").readFileSync(
+    //         require("os").homedir() + "/.config/solana/id.json",
+    //         {
+    //           encoding: "utf-8",
+    //         }
+    //       )
+    //     )
+    //   )
+    // );
+    return new NodeWallet(null);
   }
 
   async signTransaction(tx: Transaction): Promise<Transaction> {
